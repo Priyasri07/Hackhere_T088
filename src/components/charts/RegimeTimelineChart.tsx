@@ -15,13 +15,13 @@ export const RegimeTimelineChart: React.FC<Props> = ({ analysis }) => {
   const getRegimeColor = (regime: MarketRegime) => {
     switch (regime) {
       case 'Bull Market':
-        return '#10b981'; // Emerald
+        return '#10B981'; // Emerald
       case 'Bear Market':
-        return '#ef4444'; // Rose
+        return '#F43F5E'; // Ruby Rose
       case 'High Volatility':
-        return '#f59e0b'; // Amber
+        return '#F59E0B'; // Amber Gold
       case 'Low Volatility':
-        return '#38bdf8'; // Cyan
+        return '#14B8A6'; // Muted Teal
     }
   };
 
@@ -41,18 +41,18 @@ export const RegimeTimelineChart: React.FC<Props> = ({ analysis }) => {
   return (
     <div className="quant-card p-5">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-[#D4AF37]/15">
         <div className="flex items-center gap-2.5">
           <span
-            className="w-3 h-3 rounded-full"
+            className="w-3 h-3 rounded-full shadow-sm"
             style={{ backgroundColor: info?.color }}
           />
-          <h4 className="text-sm font-semibold text-slate-200">
+          <h4 className="text-sm font-bold text-white font-display">
             {info?.name} Regime Modeling
           </h4>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400">Current Status:</span>
+          <span className="text-xs text-[#A39985]">Current Status:</span>
           <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${getRegimeBadge(currentRegime)}`}>
             {currentRegime}
           </span>
@@ -61,12 +61,12 @@ export const RegimeTimelineChart: React.FC<Props> = ({ analysis }) => {
 
       {/* Regime Timeline Color Strip */}
       <div className="mb-4">
-        <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1.5">
+        <div className="flex items-center justify-between text-[11px] text-[#A39985] mb-1.5">
           <span>Historical Regime Timeline ({timeline[0]?.date} → {timeline[timeline.length - 1]?.date})</span>
-          <span className="font-mono text-slate-500">{timeline.length} Trading Days</span>
+          <span className="font-mono text-[#D4AF37]">{timeline.length} Trading Days</span>
         </div>
 
-        <div className="h-6 w-full rounded-lg overflow-hidden flex shadow-inner bg-slate-900 border border-slate-800">
+        <div className="h-6 w-full rounded-lg overflow-hidden flex shadow-inner bg-[#141414] border border-[#D4AF37]/20">
           {timeline.map((obs, idx) => (
             <div
               key={idx}
@@ -80,18 +80,18 @@ export const RegimeTimelineChart: React.FC<Props> = ({ analysis }) => {
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap items-center justify-center gap-4 mt-2 text-[11px] text-slate-400">
+        <div className="flex flex-wrap items-center justify-center gap-4 mt-2.5 text-[11px] text-[#A39985]">
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded bg-emerald-500" /> Bull ({regimeBreakdown['Bull Market']}%)
+            <span className="w-2.5 h-2.5 rounded bg-[#10B981]" /> Bull ({regimeBreakdown['Bull Market']}%)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded bg-rose-500" /> Bear ({regimeBreakdown['Bear Market']}%)
+            <span className="w-2.5 h-2.5 rounded bg-[#F43F5E]" /> Bear ({regimeBreakdown['Bear Market']}%)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded bg-amber-500" /> High Vol ({regimeBreakdown['High Volatility']}%)
+            <span className="w-2.5 h-2.5 rounded bg-[#F59E0B]" /> High Vol ({regimeBreakdown['High Volatility']}%)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded bg-sky-500" /> Low Vol ({regimeBreakdown['Low Volatility']}%)
+            <span className="w-2.5 h-2.5 rounded bg-[#14B8A6]" /> Low Vol ({regimeBreakdown['Low Volatility']}%)
           </span>
         </div>
       </div>
@@ -100,7 +100,7 @@ export const RegimeTimelineChart: React.FC<Props> = ({ analysis }) => {
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="border-b border-slate-800 text-slate-500 font-mono text-[11px]">
+            <tr className="border-b border-[#D4AF37]/15 text-[#D4AF37]/80 font-mono text-[11px] uppercase">
               <th className="py-2 text-left">Regime State</th>
               <th className="py-2 text-center">Days</th>
               <th className="py-2 text-center">Distribution</th>
@@ -109,18 +109,18 @@ export const RegimeTimelineChart: React.FC<Props> = ({ analysis }) => {
               <th className="py-2 text-right">Sharpe Ratio</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-mono">
+          <tbody className="divide-y divide-[#222222] font-mono">
             {(['Bull Market', 'Bear Market', 'High Volatility', 'Low Volatility'] as MarketRegime[]).map(reg => {
               const stat = regimeReturns[reg];
               const pct = regimeBreakdown[reg];
 
               return (
-                <tr key={reg} className="hover:bg-slate-900/40">
+                <tr key={reg} className="hover:bg-[#1A1813]/60 transition-colors">
                   <td className="py-2.5 flex items-center gap-2 font-sans font-medium text-slate-200">
                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: getRegimeColor(reg) }} />
                     <span>{reg}</span>
                   </td>
-                  <td className="py-2.5 text-center text-slate-400">{stat.daysCount}</td>
+                  <td className="py-2.5 text-center text-[#A39985]">{stat.daysCount}</td>
                   <td className="py-2.5 text-center text-slate-300">{pct}%</td>
                   <td className={`py-2.5 text-right font-semibold ${stat.annualizedReturn >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                     {stat.annualizedReturn >= 0 ? '+' : ''}{(stat.annualizedReturn * 100).toFixed(1)}%
@@ -128,7 +128,7 @@ export const RegimeTimelineChart: React.FC<Props> = ({ analysis }) => {
                   <td className="py-2.5 text-right text-slate-300">
                     {(stat.annualizedVol * 100).toFixed(1)}%
                   </td>
-                  <td className="py-2.5 text-right font-bold text-sky-400">
+                  <td className="py-2.5 text-right font-bold text-[#D4AF37]">
                     {stat.sharpe}
                   </td>
                 </tr>

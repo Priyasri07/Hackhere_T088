@@ -26,7 +26,7 @@ export const RollingMetricsChart: React.FC = () => {
       return {
         label: `${info?.name || assetId} 30D Vol`,
         data: res.volatility.map(v => v),
-        borderColor: info?.color || '#38bdf8',
+        borderColor: info?.color || '#D4AF37',
         borderWidth: 2,
         pointRadius: 0,
         tension: 0.1,
@@ -43,7 +43,7 @@ export const RollingMetricsChart: React.FC = () => {
       return {
         label: `${info?.name || assetId} 60D Sharpe`,
         data: res.sharpe,
-        borderColor: info?.color || '#38bdf8',
+        borderColor: info?.color || '#D4AF37',
         borderWidth: 2,
         pointRadius: 0,
         tension: 0.1,
@@ -54,7 +54,7 @@ export const RollingMetricsChart: React.FC = () => {
     if (rollingCorrelations.length > 0) {
       labels = rollingCorrelations[0].dates;
       datasets = rollingCorrelations.map((pair, idx) => {
-        const colors = ['#38bdf8', '#eab308', '#ec4899', '#10b981', '#a855f7'];
+        const colors = ['#D4AF37', '#10B981', '#F59E0B', '#8B5CF6', '#14B8A6'];
         return {
           label: pair.pairLabel,
           data: pair.correlations,
@@ -89,8 +89,8 @@ export const RollingMetricsChart: React.FC = () => {
         labels: {
           boxWidth: 10,
           usePointStyle: true,
-          font: { size: 10 },
-          color: '#94a3b8',
+          font: { size: 10, family: "'Inter', sans-serif" },
+          color: '#A39985',
         },
       },
     },
@@ -100,13 +100,15 @@ export const RollingMetricsChart: React.FC = () => {
         ticks: {
           maxTicksLimit: 7,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        grid: { color: 'rgba(212, 175, 55, 0.07)' },
         ticks: {
           callback: yAxisFormatter,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
     },
@@ -115,24 +117,24 @@ export const RollingMetricsChart: React.FC = () => {
   return (
     <div className="w-full">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+        <h4 className="text-xs font-bold text-white uppercase tracking-wider font-display">
           Dynamic Rolling Quant Metrics
         </h4>
 
         {/* Metric Mode Switcher */}
-        <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-lg border border-slate-800 text-xs">
+        <div className="flex items-center gap-1 bg-[#141414] p-1 rounded-xl border border-[#D4AF37]/20 text-xs">
           <button
             onClick={() => setMetricMode('VOLATILITY')}
-            className={`px-2.5 py-1 rounded transition-colors ${
-              metricMode === 'VOLATILITY' ? 'bg-sky-500/20 text-sky-400 font-semibold' : 'text-slate-400 hover:text-white'
+            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+              metricMode === 'VOLATILITY' ? 'bg-[#D4AF37]/20 text-[#FFE89C] font-bold border border-[#D4AF37]/35' : 'text-[#A39985] hover:text-white'
             }`}
           >
             Rolling 30D Volatility
           </button>
           <button
             onClick={() => setMetricMode('SHARPE')}
-            className={`px-2.5 py-1 rounded transition-colors ${
-              metricMode === 'SHARPE' ? 'bg-emerald-500/20 text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white'
+            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+              metricMode === 'SHARPE' ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/35' : 'text-[#A39985] hover:text-white'
             }`}
           >
             Rolling 60D Sharpe
@@ -140,8 +142,8 @@ export const RollingMetricsChart: React.FC = () => {
           {selectedAssets.length >= 2 && (
             <button
               onClick={() => setMetricMode('CORRELATION')}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                metricMode === 'CORRELATION' ? 'bg-purple-500/20 text-purple-400 font-semibold' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                metricMode === 'CORRELATION' ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/35' : 'text-[#A39985] hover:text-white'
               }`}
             >
               Rolling 60D Correlation

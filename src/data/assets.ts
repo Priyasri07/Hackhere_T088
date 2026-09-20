@@ -6,8 +6,8 @@ export const ASSET_REGISTRY: Record<AssetId, AssetInfo> = {
     name: 'Gold (Spot)',
     symbol: 'XAU/USD',
     category: 'Commodity',
-    color: '#eab308', // Gold yellow
-    lightColor: 'rgba(234, 179, 8, 0.15)',
+    color: '#D4AF37', // Metallic Gold
+    lightColor: 'rgba(212, 175, 55, 0.16)',
     currency: 'USD',
     exchange: 'COMEX / LBMA',
     dataSource: 'Alpha Vantage (Commodities / LBMA Fix)',
@@ -20,8 +20,8 @@ export const ASSET_REGISTRY: Record<AssetId, AssetInfo> = {
     name: 'Bitcoin',
     symbol: 'BTC/USD',
     category: 'Crypto',
-    color: '#f97316', // Orange
-    lightColor: 'rgba(249, 115, 22, 0.15)',
+    color: '#F59E0B', // Amber Gold
+    lightColor: 'rgba(245, 158, 11, 0.16)',
     currency: 'USD',
     exchange: 'Coinbase / Binance',
     dataSource: 'Alpha Vantage (Digital Currency Daily)',
@@ -34,8 +34,8 @@ export const ASSET_REGISTRY: Record<AssetId, AssetInfo> = {
     name: 'NVIDIA Corporation',
     symbol: 'NVDA',
     category: 'Equity',
-    color: '#10b981', // Emerald green
-    lightColor: 'rgba(16, 185, 129, 0.15)',
+    color: '#10B981', // Emerald green
+    lightColor: 'rgba(16, 185, 129, 0.16)',
     currency: 'USD',
     exchange: 'NASDAQ',
     dataSource: 'Alpha Vantage (Time Series Daily / Equity)',
@@ -48,8 +48,8 @@ export const ASSET_REGISTRY: Record<AssetId, AssetInfo> = {
     name: 'Ethereum',
     symbol: 'ETH/USD',
     category: 'Crypto',
-    color: '#8b5cf6', // Violet
-    lightColor: 'rgba(139, 92, 246, 0.15)',
+    color: '#8B5CF6', // Deep Violet
+    lightColor: 'rgba(139, 92, 246, 0.16)',
     currency: 'USD',
     exchange: 'Coinbase / Kraken',
     dataSource: 'Alpha Vantage (Digital Currency Daily)',
@@ -62,8 +62,8 @@ export const ASSET_REGISTRY: Record<AssetId, AssetInfo> = {
     name: 'S&P 500 ETF Trust',
     symbol: 'SPY',
     category: 'Index',
-    color: '#38bdf8', // Cyan
-    lightColor: 'rgba(56, 189, 248, 0.15)',
+    color: '#14B8A6', // Muted Teal
+    lightColor: 'rgba(20, 184, 166, 0.16)',
     currency: 'USD',
     exchange: 'NYSE Arca',
     dataSource: 'Alpha Vantage (Time Series Daily / ETF)',

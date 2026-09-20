@@ -33,12 +33,13 @@ export const PerformanceComparisonChart: React.FC<Props> = ({ height = 320, show
       .map(r => Number((r * 100).toFixed(2)));
 
     const isSingle = selectedAssets.length === 1;
+    const color = info ? info.color : '#D4AF37';
 
     return {
       label: info ? info.name : assetId,
       data: sampledData,
-      borderColor: info ? info.color : '#38bdf8',
-      backgroundColor: isSingle ? `${info ? info.color : '#38bdf8'}15` : 'transparent',
+      borderColor: color,
+      backgroundColor: isSingle ? `${color}18` : 'transparent',
       fill: isSingle,
       borderWidth: 2,
       pointRadius: 0,
@@ -60,10 +61,10 @@ export const PerformanceComparisonChart: React.FC<Props> = ({ height = 320, show
         position: 'top',
         align: 'end',
         labels: {
-          boxWidth: 12,
+          boxWidth: 10,
           usePointStyle: true,
-          font: { size: 11, weight: '500' },
-          color: '#cbd5e1',
+          font: { size: 11, family: "'Inter', sans-serif" },
+          color: '#A39985',
         },
       },
       tooltip: {
@@ -81,13 +82,15 @@ export const PerformanceComparisonChart: React.FC<Props> = ({ height = 320, show
         ticks: {
           maxTicksLimit: 8,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        grid: { color: 'rgba(212, 175, 55, 0.07)' },
         ticks: {
           callback: (value: any) => `${value >= 0 ? '+' : ''}${value}%`,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
     },
@@ -104,10 +107,12 @@ export const PerformanceComparisonChart: React.FC<Props> = ({ height = 320, show
     <div className="w-full">
       {showTitle && (
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-white uppercase tracking-wider font-display">
             {chartTitle}
           </h3>
-          <span className="text-[10px] font-mono text-slate-500">Base 0.0% Normalized</span>
+          <span className="text-[10px] font-mono text-[#D4AF37]/80 bg-[#D4AF37]/10 px-2 py-0.5 rounded border border-[#D4AF37]/20">
+            Base 0.0% Normalized
+          </span>
         </div>
       )}
       <div style={{ height }}>

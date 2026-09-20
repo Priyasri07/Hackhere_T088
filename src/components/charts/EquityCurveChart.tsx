@@ -23,20 +23,20 @@ export const EquityCurveChart: React.FC<Props> = ({ backtest, height = 320 }) =>
 
   const datasets = [
     {
-      label: `QuantX Strategy (${backtest.params.type.replace('_', ' ')})`,
+      label: `Valto Strategy (${backtest.params.type.replace('_', ' ')})`,
       data: strategyValues,
-      borderColor: '#38bdf8',
-      backgroundColor: 'rgba(56, 189, 248, 0.12)',
+      borderColor: '#D4AF37',
+      backgroundColor: 'rgba(212, 175, 55, 0.14)',
       fill: true,
       borderWidth: 2.5,
       pointRadius: 0,
-      pointHoverRadius: 4,
+      pointHoverRadius: 5,
       tension: 0.1,
     },
     {
       label: 'Benchmark (Buy & Hold)',
       data: benchmarkValues,
-      borderColor: '#94a3b8',
+      borderColor: '#8A8578',
       borderDash: [4, 4],
       fill: false,
       borderWidth: 1.8,
@@ -57,10 +57,10 @@ export const EquityCurveChart: React.FC<Props> = ({ backtest, height = 320 }) =>
         position: 'top',
         align: 'end',
         labels: {
-          boxWidth: 12,
+          boxWidth: 10,
           usePointStyle: true,
-          font: { size: 11, weight: '500' },
-          color: '#cbd5e1',
+          font: { size: 11, family: "'Inter', sans-serif" },
+          color: '#A39985',
         },
       },
       tooltip: {
@@ -75,13 +75,15 @@ export const EquityCurveChart: React.FC<Props> = ({ backtest, height = 320 }) =>
         ticks: {
           maxTicksLimit: 7,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        grid: { color: 'rgba(212, 175, 55, 0.07)' },
         ticks: {
           callback: (value: any) => `$${Number(value).toLocaleString()}`,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
     },
@@ -91,19 +93,19 @@ export const EquityCurveChart: React.FC<Props> = ({ backtest, height = 320 }) =>
     <div className="w-full">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div>
-          <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+          <h4 className="text-xs font-bold text-white uppercase tracking-wider font-display">
             Strategy vs Buy-and-Hold Equity Curve
           </h4>
-          <p className="text-[11px] text-slate-400">
-            Initial Capital: <strong className="font-mono text-slate-200">${backtest.initialCapital.toLocaleString()}</strong>
+          <p className="text-[11px] text-[#A39985]">
+            Initial Capital: <strong className="font-mono text-[#D4AF37]">${backtest.initialCapital.toLocaleString()}</strong>
           </p>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`text-xs px-2.5 py-1 rounded font-mono font-semibold border ${
+            className={`text-xs px-2.5 py-1 rounded-lg font-mono font-semibold border ${
               isOutperforming
-                ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/35'
+                : 'bg-rose-500/15 text-rose-300 border-rose-500/35'
             }`}
           >
             Alpha: {(backtest.alpha * 100).toFixed(2)}% | Beta: {backtest.beta}

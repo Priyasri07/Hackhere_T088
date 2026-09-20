@@ -44,7 +44,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#080d1a] text-slate-100 selection:bg-sky-500/30 selection:text-sky-200">
+    <div className="flex min-h-screen bg-[#050505] text-[#F5E6C8] selection:bg-[#D4AF37]/30 selection:text-[#FFD700]">
       {/* Fixed Left Navigation Sidebar */}
       <Sidebar />
 

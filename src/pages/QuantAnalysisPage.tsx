@@ -9,9 +9,7 @@ import { RollingMetricsChart } from '../components/charts/RollingMetricsChart';
 import { calculateDailyReturns } from '../engine/quantMath';
 import { Bar } from 'react-chartjs-2';
 import '../components/charts/ChartSetup';
-import {
-  Sliders,
-} from 'lucide-react';
+import { Sliders } from 'lucide-react';
 
 export const QuantAnalysisPage: React.FC = () => {
   const { selectedAssets, filteredCandles, metricsMap, riskFreeRate, setRiskFreeRate } = useQuant();
@@ -66,8 +64,8 @@ export const QuantAnalysisPage: React.FC = () => {
       {
         label: `${ASSET_REGISTRY[targetAsset]?.name || targetAsset} Daily Return Frequency`,
         data: binCounts,
-        backgroundColor: binLabels.map((_, i) => (i < 7 ? 'rgba(239, 68, 68, 0.6)' : 'rgba(16, 185, 129, 0.6)')),
-        borderColor: binLabels.map((_, i) => (i < 7 ? '#ef4444' : '#10b981')),
+        backgroundColor: binLabels.map((_, i) => (i < 7 ? 'rgba(244, 63, 94, 0.55)' : 'rgba(16, 185, 129, 0.55)')),
+        borderColor: binLabels.map((_, i) => (i < 7 ? '#F43F5E' : '#10B981')),
         borderWidth: 1,
         borderRadius: 4,
       },
@@ -88,11 +86,11 @@ export const QuantAnalysisPage: React.FC = () => {
     scales: {
       x: {
         grid: { display: false },
-        ticks: { font: { size: 9, family: "'JetBrains Mono', monospace" } },
+        ticks: { font: { size: 9, family: "'JetBrains Mono', monospace" }, color: '#8A8578' },
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-        ticks: { font: { size: 10, family: "'JetBrains Mono', monospace" } },
+        grid: { color: 'rgba(212, 175, 55, 0.07)' },
+        ticks: { font: { size: 10, family: "'JetBrains Mono', monospace" }, color: '#8A8578' },
       },
     },
   };
@@ -103,34 +101,34 @@ export const QuantAnalysisPage: React.FC = () => {
       <div className="quant-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-500/15 text-sky-400 border border-sky-500/30">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#D4AF37]/15 text-[#F5E6C8] border border-[#D4AF37]/35 shadow-sm">
               Statistical Engine
             </span>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-[#A39985]">
               {selectedAssets.length} Selected Assets
             </span>
           </div>
           <h2 className="text-xl font-bold text-white font-display">
             Quantitative Risk & Statistical Attribution
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#A39985] mt-0.5">
             Return distributions, annualization, rolling volatility, Sharpe ratios, and return-based Pearson matrices.
           </p>
         </div>
 
         {/* Risk-Free Rate Config */}
-        <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-xs">
-          <Sliders className="w-3.5 h-3.5 text-sky-400" />
-          <span className="text-slate-400">Risk-Free Rate (Rf):</span>
+        <div className="flex items-center gap-2 bg-[#141414] border border-[#D4AF37]/20 px-3 py-1.5 rounded-xl text-xs">
+          <Sliders className="w-3.5 h-3.5 text-[#D4AF37]" />
+          <span className="text-[#A39985]">Risk-Free Rate (Rf):</span>
           <select
             value={riskFreeRate}
             onChange={e => setRiskFreeRate(Number(e.target.value))}
-            className="bg-transparent font-mono text-sky-300 font-bold focus:outline-none cursor-pointer"
+            className="bg-transparent font-mono text-[#D4AF37] font-bold focus:outline-none cursor-pointer"
           >
-            <option value={0.03} className="bg-slate-900 text-slate-200">3.0% (Historic)</option>
-            <option value={0.045} className="bg-slate-900 text-slate-200">4.5% (Fed Baseline)</option>
-            <option value={0.0525} className="bg-slate-900 text-slate-200">5.25% (Peak Fed Funds)</option>
-            <option value={0.0} className="bg-slate-900 text-slate-200">0.0% (Zero Rf)</option>
+            <option value={0.03} className="bg-[#141414] text-slate-200">3.0% (Historic)</option>
+            <option value={0.045} className="bg-[#141414] text-slate-200">4.5% (Fed Baseline)</option>
+            <option value={0.0525} className="bg-[#141414] text-slate-200">5.25% (Peak Fed Funds)</option>
+            <option value={0.0} className="bg-[#141414] text-slate-200">0.0% (Zero Rf)</option>
           </select>
         </div>
       </div>
@@ -158,16 +156,16 @@ export const QuantAnalysisPage: React.FC = () => {
         <div className="lg:col-span-2 quant-card p-5">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div>
-              <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-display">
                 Daily Return Distribution Frequency
               </h4>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-[#A39985]">
                 Gaussian normality & fat tail observation
               </p>
             </div>
 
             {/* Asset Selector for Histogram */}
-            <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
+            <div className="flex items-center gap-1.5 bg-[#141414] p-1 rounded-xl border border-[#D4AF37]/20 text-xs">
               {selectedAssets.map(id => {
                 const info = ASSET_REGISTRY[id];
                 const isActive = targetAsset === id;
@@ -175,8 +173,8 @@ export const QuantAnalysisPage: React.FC = () => {
                   <button
                     key={id}
                     onClick={() => setActiveAssetForDist(id)}
-                    className={`px-2.5 py-1 rounded transition-colors ${
-                      isActive ? 'bg-sky-500/20 text-sky-300 font-semibold' : 'text-slate-400 hover:text-white'
+                    className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                      isActive ? 'bg-[#D4AF37]/20 text-[#FFE89C] font-bold border border-[#D4AF37]/35' : 'text-[#A39985] hover:text-white'
                     }`}
                   >
                     {info?.name.split(' ')[0]}
@@ -194,49 +192,49 @@ export const QuantAnalysisPage: React.FC = () => {
         {/* Statistical Summary Card */}
         <div className="quant-card p-5 flex flex-col justify-between">
           <div>
-            <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3 font-display">
               Distribution Diagnostics ({ASSET_REGISTRY[targetAsset]?.name})
             </h4>
 
-            <div className="space-y-3 text-xs font-mono">
-              <div className="flex justify-between py-1.5 border-b border-slate-800/80">
-                <span className="text-slate-400">Total Observations:</span>
+            <div className="space-y-2.5 text-xs font-mono">
+              <div className="flex justify-between py-1.5 border-b border-[#222222]">
+                <span className="text-[#A39985]">Total Observations:</span>
                 <span className="font-bold text-slate-200">{returns.length} days</span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/80">
-                <span className="text-slate-400">Daily Positive Win Rate:</span>
+              <div className="flex justify-between py-1.5 border-b border-[#222222]">
+                <span className="text-[#A39985]">Daily Positive Win Rate:</span>
                 <span className="font-bold text-emerald-400">
                   {((metricsMap[targetAsset]?.winRate || 0) * 100).toFixed(1)}%
                 </span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/80">
-                <span className="text-slate-400">Best 1-Day Return:</span>
+              <div className="flex justify-between py-1.5 border-b border-[#222222]">
+                <span className="text-[#A39985]">Best 1-Day Return:</span>
                 <span className="font-bold text-emerald-400">
                   +{((metricsMap[targetAsset]?.bestDay || 0) * 100).toFixed(2)}%
                 </span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/80">
-                <span className="text-slate-400">Worst 1-Day Return:</span>
+              <div className="flex justify-between py-1.5 border-b border-[#222222]">
+                <span className="text-[#A39985]">Worst 1-Day Return:</span>
                 <span className="font-bold text-rose-400">
                   {((metricsMap[targetAsset]?.worstDay || 0) * 100).toFixed(2)}%
                 </span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-slate-800/80">
-                <span className="text-slate-400">Calmar Ratio:</span>
-                <span className="font-bold text-sky-400">
+              <div className="flex justify-between py-1.5 border-b border-[#222222]">
+                <span className="text-[#A39985]">Calmar Ratio:</span>
+                <span className="font-bold text-[#D4AF37]">
                   {metricsMap[targetAsset]?.calmarRatio.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between py-1.5">
-                <span className="text-slate-400">Current Drawdown:</span>
-                <span className="font-bold text-amber-400">
+                <span className="text-[#A39985]">Current Drawdown:</span>
+                <span className="font-bold text-[#F59E0B]">
                   {((metricsMap[targetAsset]?.currentDrawdown || 0) * 100).toFixed(2)}%
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-500">
+          <div className="mt-4 pt-3 border-t border-[#D4AF37]/15 text-[11px] text-[#8A8578]">
             Calculated over active analysis window with exact trading session timestamps.
           </div>
         </div>

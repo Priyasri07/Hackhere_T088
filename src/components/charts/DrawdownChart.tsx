@@ -32,8 +32,8 @@ export const DrawdownChart: React.FC<Props> = ({ height = 240 }) => {
     return {
       label: `${info?.name || assetId} Drawdown`,
       data: sampledData,
-      borderColor: isSingle ? '#ef4444' : info?.color || '#ef4444',
-      backgroundColor: isSingle ? 'rgba(239, 68, 68, 0.15)' : 'transparent',
+      borderColor: isSingle ? '#F43F5E' : info?.color || '#F43F5E',
+      backgroundColor: isSingle ? 'rgba(244, 63, 94, 0.15)' : 'transparent',
       fill: isSingle,
       borderWidth: 1.5,
       pointRadius: 0,
@@ -56,8 +56,8 @@ export const DrawdownChart: React.FC<Props> = ({ height = 240 }) => {
         labels: {
           boxWidth: 10,
           usePointStyle: true,
-          font: { size: 10 },
-          color: '#94a3b8',
+          font: { size: 10, family: "'Inter', sans-serif" },
+          color: '#A39985',
         },
       },
       tooltip: {
@@ -72,14 +72,16 @@ export const DrawdownChart: React.FC<Props> = ({ height = 240 }) => {
         ticks: {
           maxTicksLimit: 7,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        grid: { color: 'rgba(212, 175, 55, 0.07)' },
         max: 0,
         ticks: {
           callback: (value: any) => `${value}%`,
           font: { size: 10, family: "'JetBrains Mono', monospace" },
+          color: '#8A8578',
         },
       },
     },
@@ -88,10 +90,12 @@ export const DrawdownChart: React.FC<Props> = ({ height = 240 }) => {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+        <h4 className="text-xs font-bold text-white uppercase tracking-wider font-display">
           Underwater Drawdown Profile
         </h4>
-        <span className="text-[10px] font-mono text-rose-400">Peak-to-Trough %</span>
+        <span className="text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/25">
+          Peak-to-Trough %
+        </span>
       </div>
       <div style={{ height }}>
         <Line data={{ labels: sampledDates, datasets }} options={options} />

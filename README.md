@@ -1,6 +1,6 @@
-# QuantX — Quantitative Multi-Asset Financial Intelligence & Backtesting Platform
+# Valto — Quantitative Multi-Asset Financial Intelligence & Backtesting Platform
 
-**QuantX** is an institutional-grade quantitative finance and algorithmic intelligence platform. It provides dynamic multi-asset portfolio analytics, returns-based correlation modeling, multi-strategy backtesting with transaction frictions, 2D parameter robustness heatmaps, rule-based market regime modeling, and grounded Featherless AI research synthesis.
+**Valto** is an institutional-grade quantitative finance and algorithmic intelligence platform. It provides dynamic multi-asset portfolio analytics, returns-based correlation modeling, multi-strategy backtesting with transaction frictions, 2D parameter robustness heatmaps, rule-based market regime modeling, grounded Featherless AI research synthesis, and a hybrid market data extraction engine.
 
 ---
 
@@ -199,6 +199,8 @@ VITE_FEATHERLESS_API_KEY=rc_8f711ed0563ff3dc574dd5a73e5d76909e94835f24af85b64ac2
 VITE_ALPHAVANTAGE_API_KEY=5067DE3NDPLWS6G6
 ```
 
+```
+
 ### 4. Run Development Server
 ```bash
 npm run dev
@@ -210,15 +212,55 @@ Open **`http://127.0.0.1:5173/`** in your browser.
 npx tsx src/tests/verifyEngine.ts
 ```
 
-### 6. Build for Production
+### 6. Run Python Financial Data Extraction Engine & Tests
 ```bash
-npm run build
+# Run unit test suite (7 comprehensive test cases)
+python scripts/test_extractor.py
+
+# Run CLI extractor for single asset (hybrid merge)
+python scripts/cli_extractor.py --symbol BTC --start 2016-01-01 --end 2024-12-31 --output btc_extracted.json
+
+# Run CLI extractor for pre-2021 yfinance fallback
+python scripts/cli_extractor.py --symbol NVDA --start 2016-01-01 --end 2020-12-31 --format csv --output nvda_historical.csv
 ```
-Production assets are generated in the `dist/` directory.
 
 ---
 
-## 🧪 Verification Engine Suite (All 9 Tests Passed)
+## 🐍 Hybrid Python Financial Data Extraction System
+
+The platform includes a production-grade Python data extraction engine ([`scripts/financial_data_extractor.py`](file:///scripts/financial_data_extractor.py)) engineered with automatic fallback and schema normalization:
+
+### 1. Dual-Source Routing & Fallback Architecture
+* **Primary Source (Alpha Vantage)**: Queried for date intervals within **2021 to 2025**.
+* **Fallback Source (yfinance)**: Automatically invoked for date ranges prior to **2021** or whenever Alpha Vantage rate-limits/errors occur.
+* **Hybrid Merge Mode**: When a requested date range spans both periods (e.g., `2018-01-01` to `2024-12-31`), the engine fetches `[start -> 2020-12-31]` from yfinance and `[2021-01-01 -> end]` from Alpha Vantage, merging them seamlessly with zero duplicate timestamps or boundary gaps.
+
+### 2. Schema Normalization & Standardization
+Both providers are normalized into an identical Pandas DataFrame schema:
+* **Index**: `Date` (`pd.DatetimeIndex`, tz-naive, strictly monotonic increasing).
+* **Columns**: `['Open', 'High', 'Low', 'Close', 'Volume']` only (matching Alpha Vantage precision).
+* **Types**: `Open`, `High`, `Low`, `Close` as `float64` (rounded to 2 decimals); `Volume` as `int64`.
+
+### 3. Cryptocurrency 2015 Historical Constraint
+* Cryptocurrencies (**Bitcoin (`BTC`)**, **Ethereum (`ETH`)**) enforce a minimum starting year of **`2015`** (`CRYPTO_MIN_START_YEAR = 2015`) rather than traditional stock market inception dates.
+* Requesting cryptocurrency data before 2015 under strict mode raises `CryptoHistoryUnavailableError` with clear diagnostic messaging.
+* Optional clamping mode (`strict_crypto_check=False` or `--no-strict-crypto`) automatically clamps the start date to `2015-01-01` with logged diagnostic warnings.
+
+### 4. CLI Extractor Options
+| Flag | Description | Default |
+| :--- | :--- | :--- |
+| `--symbol`, `-s` | Ticker symbol (e.g. `BTC`, `ETH`, `NVDA`, `GOLD`, `SPY`) | — |
+| `--universe`, `-u` | Comma-separated list of symbols for portfolio batch extraction | — |
+| `--start` | Start date (`YYYY-MM-DD`) | `2021-01-01` |
+| `--end` | End date (`YYYY-MM-DD`) | `2024-12-31` |
+| `--output`, `-o` | Output file destination path | Console only |
+| `--format`, `-f` | Output export format (`json` or `csv`) | `json` |
+| `--strict-crypto` | Enforce exception if crypto requested before 2015 | `True` |
+| `--no-strict-crypto` | Auto-clamp crypto start date to `2015-01-01` | `False` |
+
+---
+
+## 🧪 Verification Engine Suite
 
 ```
 [PASS] Filtered 3 assets across 1005 trading days (2021-01-04 to 2024-12-31).
@@ -239,4 +281,4 @@ Production assets are generated in the `dist/` directory.
 
 ## 📜 License & Disclaimers
 
-QuantX is built for institutional research, quantitative education, and algorithmic strategy development. Historical backtests and model metrics do not guarantee future performance.
+Valto is built for institutional research, quantitative education, and algorithmic strategy development. Historical backtests and model metrics do not guarantee future performance.

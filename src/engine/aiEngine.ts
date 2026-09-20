@@ -162,10 +162,11 @@ export async function queryQuantAI(
   // If user provided a Featherless API Key, call official Featherless OpenAI-compatible endpoint
   if (apiKey && apiKey.trim().length > 5) {
     try {
-      const systemInstruction = `You are QuantX AI Research Assistant, an institutional-grade quantitative financial analyst powered by Featherless AI.
-CRITICAL MANDATORY RULE: You must ONLY reference the exact mathematical numbers provided in the Ground Truth JSON payload below. 
-Do NOT hallucinate or alter any prices, returns, correlations, drawdowns, or Sharpe ratios.
-Format your output cleanly using Markdown headers, bullet points, and bold financial metrics.
+      const systemInstruction = `You are Valto AI Research Assistant, an institutional-grade quantitative financial analyst powered by Featherless AI.
+CRITICAL MANDATORY RULES:
+1. You must ONLY reference the exact mathematical numbers provided in the Ground Truth JSON payload below. Do NOT hallucinate or alter any prices, returns, correlations, drawdowns, or Sharpe ratios.
+2. Present all analysis, synthesis, and diagnostic outputs in plain text format without using any star symbols, asterisks, bullet points, rating indicators, numerical scores, or visual ranking markers.
+3. Deliver information in continuous prose paragraphs with clear section headers using only words and standard punctuation. Maintain the analytical depth and rigor of the mathematical engine while ensuring the presentation is entirely free of decorative or hierarchical symbols that might appear as ratings or emphasis markers.
 Ground Truth JSON Payload:
 ${JSON.stringify(payload, null, 2)}`;
 
@@ -174,8 +175,8 @@ ${JSON.stringify(payload, null, 2)}`;
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey.trim()}`,
-          'HTTP-Referer': 'https://quantx.local',
-          'X-Title': 'QuantX Quantitative Intelligence'
+          'HTTP-Referer': 'https://valto.local',
+          'X-Title': 'Valto Quantitative Intelligence'
         },
         body: JSON.stringify({
           model: 'Qwen/Qwen2.5-7B-Instruct',
@@ -209,158 +210,151 @@ ${JSON.stringify(payload, null, 2)}`;
 
   if (action === 'Summarize Analysis') {
     if (isSingle) {
-      return `### Executive Quantitative Summary: ${singleData?.name} (${singleAsset})
+      return `Executive Quantitative Summary: ${singleData?.name} (${singleAsset})
 
-* **Analysis Period**: \`${payload.dateRange.start}\` → \`${payload.dateRange.end}\`
-* **Historical Performance**: Total Return **${singleData?.totalReturn}** (CAGR: **${singleData?.cagr}**).
-* **Risk-Adjusted Return**: Annualized Sharpe Ratio is **${singleData?.sharpeRatio}** with realized annualized volatility of **${singleData?.annualizedVol}**.
-* **Drawdown Profile**: Experienced a maximum drawdown of **${singleData?.maxDrawdown}**.
-* **Market Regime**: Currently operating in **${payload.regimes?.[singleAsset]?.current || 'Active Regime'}**.
+Analysis Period: ${payload.dateRange.start} to ${payload.dateRange.end}.
 
-**Key Observation**: ${singleAsset === 'GOLD' ? 'Gold served as a steady low-volatility capital preservation vehicle with minimal tail risk.' : singleAsset === 'BTC' ? 'Bitcoin delivered asymmetrical upside with high historical volatility and deep drawdowns.' : 'NVIDIA demonstrated exponential AI-driven capital expansion with elevated equity beta.'}`;
+Historical Performance and Risk:
+${singleData?.name} generated a total return of ${singleData?.totalReturn} with a compound annual growth rate of ${singleData?.cagr}. The annualized Sharpe ratio stands at ${singleData?.sharpeRatio} alongside realized annualized volatility of ${singleData?.annualizedVol}. The maximum peak to trough drawdown recorded was ${singleData?.maxDrawdown}.
+
+Market Regime and Strategic Observation:
+The asset is currently operating in the ${payload.regimes?.[singleAsset]?.current || 'Active Regime'} condition. ${singleAsset === 'GOLD' ? 'Gold served as a steady low volatility capital preservation vehicle with minimal tail risk.' : singleAsset === 'BTC' ? 'Bitcoin delivered asymmetrical upside with high historical volatility and deep drawdowns.' : 'NVIDIA demonstrated exponential AI-driven capital expansion with elevated equity beta.'}`;
     } else {
       const names = assets.map(a => payload.assetsData[a]?.name).join(', ');
-      return `### Multi-Asset Quantitative Summary: ${names}
+      return `Multi Asset Quantitative Summary: ${names}
 
-* **Active Universe**: \`[${assets.join(', ')}]\` (${assets.length} Assets)
-* **Date Span**: \`${payload.dateRange.start}\` to \`${payload.dateRange.end}\`
-* **Performance Ranking (CAGR)**:
-${assets.map((a, i) => `  ${i + 1}. **${payload.assetsData[a]?.name}**: CAGR **${payload.assetsData[a]?.cagr}** | Sharpe **${payload.assetsData[a]?.sharpeRatio}** | Max DD **${payload.assetsData[a]?.maxDrawdown}**`).join('\n')}
+Active Universe: ${assets.join(', ')} across the observation period from ${payload.dateRange.start} to ${payload.dateRange.end}.
 
-**Cross-Asset Dynamics**:
-Combining these assets provides distinct risk profiles. ${payload.correlationMatrix ? `The return-based correlation matrix reveals low-to-moderate pairwise dependency, creating favorable conditions for multi-asset risk parity or momentum portfolio strategies.` : ''}`;
+Comparative Performance and Risk:
+${assets.map(a => `${payload.assetsData[a]?.name} delivered a compound annual growth rate of ${payload.assetsData[a]?.cagr} with an annualized Sharpe ratio of ${payload.assetsData[a]?.sharpeRatio} and a maximum drawdown of ${payload.assetsData[a]?.maxDrawdown}.`).join('\n\n')}
+
+Cross Asset Dynamics:
+Combining these assets provides distinct risk characteristics across asset classes. ${payload.correlationMatrix ? 'The return-based correlation matrix reveals low to moderate pairwise dependency, creating favorable conditions for multi-asset risk parity or momentum portfolio allocations.' : ''}`;
     }
   }
 
   if (action === 'Explain Performance') {
     if (isSingle) {
-      return `### Performance Attribution: ${singleData?.name}
+      return `Performance Attribution: ${singleData?.name}
 
-During the analysis period (\`${payload.dateRange.start}\` to \`${payload.dateRange.end}\`), **${singleData?.name}** achieved:
-* **Total Cumulative Return**: ${singleData?.totalReturn}
-* **Compound Annual Growth Rate (CAGR)**: ${singleData?.cagr}
-* **Win Rate (Daily % Positive)**: ${singleData?.winRate}
-* **Latest Reference Price**: ${singleData?.latestPrice} vs 200 SMA at ${singleData?.sma200}
+During the analysis period from ${payload.dateRange.start} to ${payload.dateRange.end}, ${singleData?.name} achieved a total cumulative return of ${singleData?.totalReturn} representing a compound annual growth rate of ${singleData?.cagr}. The daily positive win rate recorded was ${singleData?.winRate}. The latest reference price settled at ${singleData?.latestPrice} relative to the two hundred day simple moving average of ${singleData?.sma200}.
 
-The asset exhibited ${singleAsset === 'NVDA' ? 'growth compounding driven by massive tech infrastructure demand' : singleAsset === 'BTC' ? 'monetary adoption cycles punctuated by four-year halving trends' : 'macro inflation hedge characteristics with steady real yield responsiveness'}.`;
+Market Drivers:
+The asset exhibited ${singleAsset === 'NVDA' ? 'growth compounding driven by massive technology infrastructure demand' : singleAsset === 'BTC' ? 'monetary adoption cycles punctuated by four-year halving trends' : 'macro inflation hedge characteristics with steady real yield responsiveness'}.`;
     } else {
-      return `### Comparative Performance Attribution
+      return `Comparative Performance Attribution
 
-Analyzing **${assets.join(' vs ')}**:
+Performance Breakdown:
 ${assets.map(a => {
   const d = payload.assetsData[a];
-  return `* **${d?.name}**: Generated **${d?.totalReturn}** total return (**${d?.cagr}** CAGR) with a daily win rate of **${d?.winRate}**.`;
-}).join('\n')}
+  return `${d?.name} generated a total cumulative return of ${d?.totalReturn} with a compound annual growth rate of ${d?.cagr} and a daily positive win rate of ${d?.winRate}.`;
+}).join('\n\n')}
 
-**Return Dispersion**:
-There is significant dispersion across these asset classes. ${assets.includes('NVDA') ? 'NVIDIA provided the highest growth momentum' : ''} while ${assets.includes('GOLD') ? 'Gold provided anchor stability' : ''}.`;
+Return Dispersion:
+There is significant dispersion across these asset classes. ${assets.includes('NVDA') ? 'NVIDIA provided the highest growth momentum.' : ''} ${assets.includes('GOLD') ? 'Gold provided anchor stability.' : ''}`;
     }
   }
 
   if (action === 'Explain Risk') {
-    return `### Risk & Volatility Assessment
+    return `Risk and Volatility Assessment
 
+Asset Risk Profiles:
 ${assets.map(a => {
   const d = payload.assetsData[a];
-  return `* **${d?.name} (${a})**:
-  - Annualized Volatility: **${d?.annualizedVol}**
-  - Sharpe Ratio (Rf = 4.5%): **${d?.sharpeRatio}**
-  - Maximum Peak-to-Trough Drawdown: **${d?.maxDrawdown}**`;
+  return `${d?.name} (${a}) registered annualized volatility of ${d?.annualizedVol}, an annualized Sharpe ratio of ${d?.sharpeRatio} calculated at a risk-free rate of four point five percent, and a maximum peak to trough drawdown of ${d?.maxDrawdown}.`;
 }).join('\n\n')}
 
-**Portfolio Risk Takeaway**:
-${isSingle ? `Single asset exposure to ${singleAsset} carries idiosyncratic concentration risk with max drawdown of ${singleData?.maxDrawdown}.` : `Multi-asset diversification across non-correlated asset classes (${assets.join(', ')}) compresses total portfolio variance compared to individual concentrated holdings.`}`;
+Portfolio Risk Takeaway:
+${isSingle ? `Single asset exposure to ${singleAsset} carries idiosyncratic concentration risk with maximum historical drawdown of ${singleData?.maxDrawdown}.` : `Multi-asset diversification across non-correlated asset classes (${assets.join(', ')}) compresses total portfolio variance compared to individual concentrated holdings.`}`;
   }
 
   if (action === 'Explain Correlation' || action === 'Compare Selected Assets') {
     if (isSingle) {
-      return `### Correlation Notice
-Correlation requires at least **2 selected assets**. Please select additional assets (e.g. Bitcoin, NVIDIA, Gold) from the top global bar to view return-based correlation matrices.`;
+      return `Correlation Notice
+
+Correlation analysis requires at least two selected assets. Please select additional assets from the top navigation bar to view return-based pairwise correlation matrices.`;
     }
     const matrix = payload.correlationMatrix;
-    return `### Return-Based Correlation Analysis
+    return `Return Based Correlation Analysis
 
-* **Selected Assets**: \`[${assets.join(', ')}]\`
-* **Correlation Basis**: Daily Percentage Returns (Pearson $r$)
+Selected Assets: ${assets.join(', ')} evaluated on daily percentage returns using the Pearson correlation coefficient.
 
-${matrix ? `**Matrix Values**:
-${matrix.assets.map((a, i) => `* **${a}**: ${matrix.matrix[i].map((val, j) => `${matrix.assets[j]}: \`${val >= 0 ? '+' : ''}${val.toFixed(2)}\``).join(' | ')}`).join('\n')}` : ''}
+Matrix Breakdown:
+${matrix ? matrix.assets.map((a, i) => `${a} exhibits pairwise correlation with ${matrix.matrix[i].map((val, j) => `${matrix.assets[j]} at ${val >= 0 ? '+' : ''}${val.toFixed(2)}`).join(', ')}.`).join('\n\n') : ''}
 
-**Key Strategic Implication**:
-Asset returns demonstrate independent driver dynamics. Gold exhibits low correlation with digital assets and tech equities, offering portfolio diversification benefits.`;
+Strategic Implications:
+Asset returns demonstrate independent driver dynamics. Gold exhibits low correlation with digital assets and technology equities, offering structural diversification benefits.`;
   }
 
   if (action === 'Explain Drawdown') {
-    return `### Drawdown & Tail-Risk Diagnostics
+    return `Drawdown and Tail Risk Diagnostics
 
-* **Worst Maximum Drawdowns**:
-${assets.map(a => `  - **${payload.assetsData[a]?.name}**: **${payload.assetsData[a]?.maxDrawdown}**`).join('\n')}
+Maximum Drawdown Summary:
+${assets.map(a => `${payload.assetsData[a]?.name} experienced a maximum peak to trough drawdown of ${payload.assetsData[a]?.maxDrawdown}.`).join('\n\n')}
 
-**Recovery & Stress Testing**:
-Maximum drawdown reflects the largest decline from historical peak before a new high is formed. High-beta assets like Bitcoin and tech equities experienced steep correction phases during macro tightening regimes, whereas Gold experienced milder drawdowns.`;
+Recovery and Stress Testing:
+Maximum drawdown reflects the largest observed decline from a historical peak before establishing a new high. High beta assets such as Bitcoin and technology equities experienced steep correction phases during macroeconomic tightening regimes, whereas Gold maintained milder drawdown trajectories.`;
   }
 
   if (action === 'Explain Backtest') {
     const bt = payload.backtest;
     if (!bt) {
-      return `### Backtest Engine Ready
-Please run a backtest in the **Strategy Lab** or **Backtesting** tab to generate detailed strategy vs benchmark trade attribution and execution analytics.`;
+      return `Backtest Engine Status
+
+Please run a backtest in the Strategy Lab or Backtesting tab to generate detailed strategy versus benchmark trade attribution and execution analytics.`;
     }
-    return `### Backtest Simulation Breakdown: ${bt.strategy}
+    return `Backtest Simulation Breakdown: ${bt.strategy}
 
-* **Portfolio Capital**: Initial \`$${bt.initialCapital.toLocaleString()}\` → Final \`$${bt.finalValue.toLocaleString()}\`
-* **Strategy Total Return**: **${bt.totalReturn}** (CAGR: **${bt.cagr}**)
-* **Sharpe Ratio**: **${bt.sharpe}** | **Max Drawdown**: **${bt.maxDrawdown}**
-* **Trade Statistics**: **${bt.totalTrades}** total executions | Win Rate: **${bt.winRate}**
-* **Benchmark (Buy & Hold)**: Return **${bt.benchmarkReturn}** | Sharpe **${bt.benchmarkSharpe}**
-* **Alpha Generation**: **${bt.alpha}** | Portfolio Beta: **${bt.beta}**
+Capital and Return Performance:
+The strategy began with an initial portfolio capital of $${bt.initialCapital.toLocaleString()} and concluded at a final portfolio value of $${bt.finalValue.toLocaleString()}. The strategy delivered a total return of ${bt.totalReturn} with a compound annual growth rate of ${bt.cagr}.
 
-**Verdict**:
-The quantitative strategy achieved ${parseFloat(bt.totalReturn) >= parseFloat(bt.benchmarkReturn) ? 'favorable outperformance against the buy-and-hold baseline with disciplined risk control' : 'reduced drawdown exposure while sacrificing some bull-market upside participation'}.`;
+Risk Metrics and Execution Statistics:
+The backtest yielded an annualized Sharpe ratio of ${bt.sharpe} with a maximum drawdown of ${bt.maxDrawdown}. Across the simulation period, the model executed ${bt.totalTrades} total trades with a win rate of ${bt.winRate}. The buy and hold benchmark generated a total return of ${bt.benchmarkReturn} and a Sharpe ratio of ${bt.benchmarkSharpe}. The strategy generated alpha of ${bt.alpha} with a portfolio beta of ${bt.beta}.
+
+Strategy Verdict:
+The quantitative strategy achieved ${parseFloat(bt.totalReturn) >= parseFloat(bt.benchmarkReturn) ? 'favorable outperformance against the buy and hold baseline with disciplined risk control' : 'reduced drawdown exposure while sacrificing some bull market upside participation'}.`;
   }
 
   if (action === 'Explain Robustness') {
     const rob = payload.robustness;
     if (!rob) {
-      return `### Parameter Robustness
-Run the 2D parameter sweep in the **Robustness** tab to inspect strategy stability across parameter windows and fee regimes.`;
+      return `Parameter Robustness Status
+
+Please run the two dimensional parameter sweep in the Robustness tab to evaluate strategy stability across parameter windows and transaction fee regimes.`;
     }
-    return `### Parameter Sensitivity & Overfitting Diagnosis
+    return `Parameter Sensitivity and Overfitting Diagnosis
 
-* **Strategy Evaluated**: ${rob.strategy}
-* **Parameter Space Stability**: **${rob.stableRegionPct}** of tested parameter configurations yielded positive Sharpe ratios.
-* **Sharpe Range Across Grid**: Min **${rob.sharpeRange[0]}** to Max **${rob.sharpeRange[1]}** (Median: **${rob.medianSharpe}**)
+Stability Evaluation:
+Across the tested parameter configurations for the ${rob.strategy} strategy, ${rob.stableRegionPct} of parameter combinations produced positive Sharpe ratios. The annualized Sharpe ratio ranged from a minimum of ${rob.sharpeRange[0]} to a maximum of ${rob.sharpeRange[1]} with a median value of ${rob.medianSharpe}.
 
-**Quant Takeaway**:
-The strategy exhibits a smooth performance plateau rather than an isolated spike, suggesting low risk of curve-fitting/overfitting.`;
+Quantitative Takeaway:
+The strategy demonstrates a consistent performance plateau rather than an isolated spike, indicating low susceptibility to curve fitting or parameter overfitting.`;
   }
 
   if (action === 'Explain Market Regimes') {
-    return `### Rule-Based Market Regime Diagnostics
+    return `Rule Based Market Regime Diagnostics
 
+Regime Breakdown:
 ${assets.map(a => {
   const reg = payload.regimes?.[a];
-  return `* **${payload.assetsData[a]?.name} (${a})**:
-  - Current Condition: **${reg?.current || 'Bull Market'}**
-  - Historical Distribution: Bull (\`${reg?.breakdown?.['Bull Market'] || '0%'}\`), Bear (\`${reg?.breakdown?.['Bear Market'] || '0%'}\`), High Vol (\`${reg?.breakdown?.['High Volatility'] || '0%'}\`), Low Vol (\`${reg?.breakdown?.['Low Volatility'] || '0%'}\`)`;
+  return `${payload.assetsData[a]?.name} (${a}) is currently operating in a ${reg?.current || 'Bull Market'} condition. Historically across the analysis window, the asset spent ${reg?.breakdown?.['Bull Market'] || '0%'} in Bull Market, ${reg?.breakdown?.['Bear Market'] || '0%'} in Bear Market, ${reg?.breakdown?.['High Volatility'] || '0%'} in High Volatility, and ${reg?.breakdown?.['Low Volatility'] || '0%'} in Low Volatility regimes.`;
 }).join('\n\n')}
 
-**Regime Filter Takeaway**:
-Quantitative trend strategies perform best when transitioning out of High Volatility and into sustained Bull regimes with prices above the 200-day moving average.`;
+Regime Filter Takeaway:
+Quantitative trend strategies perform best when transitioning out of High Volatility and into sustained Bull regimes with asset prices trading above their two hundred day moving averages.`;
   }
 
   // Default query handler
-  return `### Quantitative Intelligence Response
+  return `Quantitative Intelligence Response
 
-* **Target Assets**: \`[${assets.join(', ')}]\`
-* **Analysis Period**: \`${payload.dateRange.start}\` → \`${payload.dateRange.end}\`
+Analysis Scope:
+Assets evaluated include ${assets.join(', ')} spanning the analysis period from ${payload.dateRange.start} to ${payload.dateRange.end} in response to the user inquiry regarding ${userPrompt}.
 
-**Response to**: *"${userPrompt}"*
+Statistical Findings:
+${assets.map(a => `${payload.assetsData[a]?.name} registered a total return of ${payload.assetsData[a]?.totalReturn}, annualized volatility of ${payload.assetsData[a]?.annualizedVol}, and an annualized Sharpe ratio of ${payload.assetsData[a]?.sharpeRatio}.`).join('\n\n')}
 
-Based on the verified calculations:
-${assets.map(a => `* **${payload.assetsData[a]?.name}**: Return **${payload.assetsData[a]?.totalReturn}**, Annualized Volatility **${payload.assetsData[a]?.annualizedVol}**, Sharpe **${payload.assetsData[a]?.sharpeRatio}**`).join('\n')}
+${payload.backtest ? `The strategy backtest produced a total return of ${payload.backtest.totalReturn} across ${payload.backtest.totalTrades} trades.` : ''}
 
-${payload.backtest ? `Strategy backtest produced **${payload.backtest.totalReturn}** with **${payload.backtest.totalTrades}** trades.` : ''}
-
-All metrics are derived directly from the mathematical engine without fabrication.`;
+Integrity Note:
+All metrics are derived directly from the verified mathematical engine without fabrication.`;
 }
