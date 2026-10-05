@@ -7,7 +7,6 @@ risk and market regimes through dynamically computed metrics.
 The platform supports Gold, Bitcoin, NVIDIA, Ethereum, and S&P 500, with
 analysis dynamically recomputed based on the selected assets and date range.
 
-**Live Demo:** [Add your Vercel URL here]  
 **Repository:** https://github.com/Priyasri07/Hackhere_T088
 
 ---
